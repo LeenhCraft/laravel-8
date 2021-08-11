@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curso;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
@@ -9,7 +10,10 @@ class CursoController extends Controller
     //metodo index por convexion para la pagina principal
     public function index()
     {
-        return view('cursos.index');
+
+        // $cursos=Curso::all();
+        $cursos = Curso::paginate();
+        return view('cursos.index', compact('cursos'));
     }
 
     //metodo si se creará algo
@@ -19,9 +23,12 @@ class CursoController extends Controller
     }
 
     //metodo si neceistamos mostrar
-    public function show($curso)
+    public function show($id, $categoria = null)
     {
-        compact('curso'); // ['curso' => $curso]
-        return view('cursos.show', compact('curso'));
+        // compact('curso'); es igual a ['curso' => $curso]
+
+        $curso = Curso::find($id);
+
+        return view('cursos.show', compact('curso'), compact('categoria'));
     }
 }
