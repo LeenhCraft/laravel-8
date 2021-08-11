@@ -12,7 +12,7 @@ class CursoController extends Controller
     {
 
         // $cursos=Curso::all();
-        $cursos = Curso::paginate();
+        $cursos = Curso::orderBy('id', 'desc')->paginate();
         return view('cursos.index', compact('cursos'));
     }
 
@@ -22,13 +22,45 @@ class CursoController extends Controller
         return view('cursos.create');
     }
 
-    //metodo si neceistamos mostrar
-    public function show($id, $categoria = null)
+    public function store(Request $request)
+    {
+        $curso = new Curso();
+
+        $curso->name = $request->name;
+        $curso->description = $request->descripcion;
+        $curso->categoria = $request->categoria;
+
+        $curso->save();
+
+        return redirect()->route('cursos.show', $curso);
+    }
+
+    /*metodo si necesitamos mostrar, con la primera forma de 
+    recuperar los datos de un registro*/
+    public function show($id)
     {
         // compact('curso'); es igual a ['curso' => $curso]
 
         $curso = Curso::find($id);
+        return view('cursos.show', compact('curso'));
+    }
 
-        return view('cursos.show', compact('curso'), compact('categoria'));
+    /*Metodo 2 para recuperar un registro*/
+    public function edit(Curso $curso)
+    {
+        // $curso = Curso::find($id);
+        // return $curso;
+        return view('cursos.edit', ['curso' => $curso]);
+    }
+
+    public function update(Curso $curso, Request $request)
+    {
+        $curso->name = $request->name;
+        $curso->description = $request->descripcion;
+        $curso->categoria = $request->categoria;
+
+        $curso->save();
+
+        return redirect()->route('cursos.show', $curso);
     }
 }
