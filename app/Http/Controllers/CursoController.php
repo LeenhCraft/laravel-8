@@ -61,16 +61,16 @@ class CursoController extends Controller
         );
         /*END_VALIDACION */
 
-        // $curso->name = $request->name;
-        // $curso->description = $request->description;
-        // $curso->categoria = $request->categoria;
-
-        // $curso->save();
-
         /*ASIGNACION MASIVA */
         $curso->update($request->all());
         /*END_ASIGNACION MASIVA */
 
         return redirect()->route('cursos.show', $curso);
+    }
+
+    public function destroy(Curso $curso)
+    {
+        $curso->delete();
+        return redirect()->route('cursos.index');
     }
 }
